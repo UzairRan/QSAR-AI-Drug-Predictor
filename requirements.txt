@@ -6,7 +6,8 @@ python-dotenv
 pyyaml
 
 # RDKit
-rdkit-pypi
+# rdkit-pypi
+rdkit-pypi==2023.9.3 
 
 # Machine Learning
 scikit-learn
