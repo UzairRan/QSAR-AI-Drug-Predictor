@@ -1,11 +1,9 @@
 services:
   - type: web
     name: qsar-backend
-    runtime: image # Changed from 'python' to 'image'
+    runtime: image          # Use Docker
     plan: free
-    # Remove the buildCommand and startCommand
-    # Dockerfile will handle build and start
-    dockerfilePath: ./Dockerfile # Points to your Dockerfile
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: PYTHON_VERSION
-        value: 3.10.0 # This will be used by the Docker image  
+        value: 3.10.0       
