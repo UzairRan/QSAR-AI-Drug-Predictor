@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ..
+    container_name: qsar-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../models:/app/models
+    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    build: ..
+    container_name: qsar-frontend
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+    environment:
+      - API_URL=http://backend:8000/api/v1
+    command: streamlit run frontend/app.py --server.port 8501 --server.address 0.0.0.0  

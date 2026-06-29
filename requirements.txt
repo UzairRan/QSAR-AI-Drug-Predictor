@@ -1,0 +1,32 @@
+# Core
+numpy 
+numpy>=1.24.0 
+pandas
+python-dotenv
+pyyaml
+
+# RDKit
+rdkit-pypi
+
+# Machine Learning
+scikit-learn
+xgboost
+lightgbm
+
+# Explainability
+shap
+
+# API
+fastapi
+uvicorn
+pydantic
+
+# Frontend
+streamlit
+plotly
+
+# Utilities
+joblib
+matplotlib
+seaborn
+requests   

@@ -1,0 +1,68 @@
+
+---
+
+## 📁 **18. `.gitignore`**
+
+```gitignore
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Models
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.onnx
+
+# Data
+*.csv
+*.npy
+*.json
+!config/*.json
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Deployment
+.env
+*.env
+
+# Coverage
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Docker
+*.tar
+*.gz
+
+# Streamlit
+.streamlit/  

@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: qsar-admet-backend
+    runtime: python
+    plan: free
+    path: /
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: MLFLOW_TRACKING_URI
+        value: mlflow/mlruns
+
+  - type: web
+    name: qsar-admet-frontend
+    runtime: python
+    plan: free
+    path: /frontend
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run app.py --server.port $PORT --server.address 0.0.0.0
+    envVars:
+      - key: API_URL
+        value: https://qsar-admet-backend.onrender.com/api/v1  

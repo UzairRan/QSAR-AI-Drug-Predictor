@@ -1,0 +1,19 @@
+# QSAR Prediction Platform Configuration
+
+models:
+  qsar_regressor: "models/qsar_best_regressor.pkl"
+  qsar_classifier: "models/qsar_best_classifier.pkl"
+  scalers:
+    qsar: "models/scaler_qsar.joblib"
+  feature_names:
+    qsar: "models/qsar_feature_names.txt"
+
+api:
+  title: "QSAR Prediction API" 
+  version: "1.0.0"
+  description: "Predict pIC50 and activity class from SMILES"
+
+frontend:
+  title: "🧪 QSAR Predictor"
+  theme: "dark"
+  max_batch_size: 100  

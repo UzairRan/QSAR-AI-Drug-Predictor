@@ -1,0 +1,8 @@
+MolWt
+NumHDonors
+NumHAcceptors
+TPSA
+NumRotatableBonds
+RingCount
+HeavyAtomCount
+NumAromaticRings
