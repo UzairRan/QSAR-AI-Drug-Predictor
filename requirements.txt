@@ -6,7 +6,8 @@ rdkit-pypi==2022.9.5
 scikit-learn
 xgboost
 lightgbm
-shap==0.42.1
+# shap==0.42.1
+shap==0.44.0 
 fastapi
 uvicorn
 pydantic
