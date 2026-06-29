@@ -10,7 +10,8 @@ import requests
 import json
 from rdkit import Chem
 
-API_URL = "http://localhost:8000/api/v1"
+# API_URL = "http://localhost:8000/api/v1"
+API_URL = "https://qsar-ai-drug-predictor.onrender.com/api/v1" 
 
 def render():
     """Render the batch prediction page"""

@@ -13,7 +13,8 @@ import pandas as pd
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-API_URL = "http://localhost:8000/api/v1"
+# API_URL = "http://localhost:8000/api/v1"
+API_URL = "https://qsar-ai-drug-predictor.onrender.com/api/v1"  
 
 def get_molecule_name(smiles: str) -> str:
     """Get common name for a molecule if available"""
