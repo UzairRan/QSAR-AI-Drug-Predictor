@@ -1,8 +1,11 @@
 services:
   - type: web
     name: qsar-backend
-    runtime: python
+    runtime: image # Changed from 'python' to 'image'
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
-    # PYTHON_VERSION removed - using .python-version instead  
+    # Remove the buildCommand and startCommand
+    # Dockerfile will handle build and start
+    dockerfilePath: ./Dockerfile # Points to your Dockerfile
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0 # This will be used by the Docker image  
