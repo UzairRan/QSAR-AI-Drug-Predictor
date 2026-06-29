@@ -18,10 +18,11 @@ class ExplainerService:
     def __init__(self):
         self.explainer = None
         self.feature_names = None
+        self.scaler = None
         self._load_explainer()
     
     def _load_explainer(self):
-        """Load SHAP explainer with fallback for deployment"""
+        """Load SHAP explainer with correct data types"""
         try:
             logger.info("Starting SHAP explainer loading...")
             
@@ -34,16 +35,22 @@ class ExplainerService:
             model = joblib.load('models/qsar_best_regressor.pkl')
             logger.info("Loaded regression model")
             
-            # Create background data
+            # Load scaler
+            self.scaler = joblib.load('models/scaler_qsar.joblib')
+            logger.info("Loaded scaler")
+            
+            # Create background data with CORRECT data type
             try:
                 background_data = np.load('models/shap_background.npy')
-                logger.info("Loaded SHAP background data from file")
+                # Ensure float64 type
+                background_data = background_data.astype(np.float64)
+                logger.info(f"Loaded SHAP background data: {background_data.shape}")
             except (FileNotFoundError, IOError):
                 logger.info("Generating random background data...")
-                background_data = np.random.randn(50, len(self.feature_names))
-                logger.info("Generated random SHAP background data")
+                background_data = np.random.randn(50, len(self.feature_names)).astype(np.float64)
+                logger.info(f"Generated random background data: {background_data.shape}")
             
-            # Create explainer with timeout protection
+            # Create explainer
             import time
             start_time = time.time()
             self.explainer = shap.TreeExplainer(model, background_data)
@@ -56,9 +63,7 @@ class ExplainerService:
             self.explainer = None
     
     def get_explanation(self, smiles: str) -> Dict[str, Any]:
-        """
-        Generate SHAP explanation for a SMILES
-        """
+        """Generate SHAP explanation for a SMILES"""
         if self.explainer is None:
             logger.warning(f"SHAP explainer not available for {smiles}")
             return {"error": "SHAP explainer not available"}
@@ -69,7 +74,7 @@ class ExplainerService:
             if mol is None:
                 raise ValueError(f"Invalid SMILES: {smiles}")
             
-            # Calculate descriptors
+            # Calculate 8 descriptors (matching training)
             selected_descriptors = [
                 'MolWt', 'NumHDonors', 'NumHAcceptors', 
                 'TPSA', 'NumRotatableBonds',
@@ -85,14 +90,18 @@ class ExplainerService:
                 except:
                     features.append(0.0)
             
-            features = np.array(features).reshape(1, -1)
+            # Convert to numpy array with correct dtype
+            features = np.array(features, dtype=np.float64).reshape(1, -1)
+            
+            # Scale features
+            features_scaled = self.scaler.transform(features)
             
             # Get SHAP values
-            shap_values = self.explainer.shap_values(features)
+            shap_values = self.explainer.shap_values(features_scaled)
             
             # Format results
             feature_importance = []
-            for i, (name, value) in enumerate(zip(self.feature_names, features[0])):
+            for i, (name, value) in enumerate(zip(self.feature_names, features_scaled[0])):
                 feature_importance.append({
                     'feature': name,
                     'value': float(value),
@@ -110,4 +119,5 @@ class ExplainerService:
             
         except Exception as e:
             logger.error(f"SHAP explanation error: {str(e)}")
+            logger.error(traceback.format_exc())
             return {"error": f"Failed to generate explanation: {str(e)}"}  
