@@ -1,9 +1,9 @@
 services:
   - type: web
     name: qsar-backend
-    runtime: image          # Use Docker
+    runtime: image
     plan: free
     dockerfilePath: ./Dockerfile
     envVars:
       - key: PYTHON_VERSION
-        value: 3.10.0       
+        value: 3.10.0   
