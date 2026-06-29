@@ -6,7 +6,7 @@ rdkit-pypi==2022.9.5
 scikit-learn
 xgboost
 lightgbm
-shap
+shap==0.42.1
 fastapi
 uvicorn
 pydantic
@@ -15,4 +15,5 @@ plotly
 joblib
 matplotlib
 seaborn
-requests  
+requests
+scipy>=1.10.0  

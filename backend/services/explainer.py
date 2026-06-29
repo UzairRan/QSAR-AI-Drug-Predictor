@@ -8,6 +8,7 @@ import joblib
 from typing import Dict, Any
 from rdkit import Chem
 from rdkit.Chem import Descriptors
+import traceback
 
 from config.logging_config import logger
 
@@ -22,30 +23,36 @@ class ExplainerService:
     def _load_explainer(self):
         """Load SHAP explainer with fallback for deployment"""
         try:
+            logger.info("Starting SHAP explainer loading...")
+            
             # Load feature names
             with open('models/qsar_feature_names.txt', 'r') as f:
                 self.feature_names = [line.strip() for line in f.readlines()]
+            logger.info(f"Loaded {len(self.feature_names)} feature names")
             
             # Load model
             model = joblib.load('models/qsar_best_regressor.pkl')
+            logger.info("Loaded regression model")
             
-            # Create background data with fallback for memory issues
+            # Create background data
             try:
-                # Try to load saved background data (more stable)
                 background_data = np.load('models/shap_background.npy')
                 logger.info("Loaded SHAP background data from file")
             except (FileNotFoundError, IOError):
-                # Fallback: generate random background data
-                # Using 50 samples to save memory on free tier
+                logger.info("Generating random background data...")
                 background_data = np.random.randn(50, len(self.feature_names))
-                logger.info("Generated random SHAP background data (50 samples)")
+                logger.info("Generated random SHAP background data")
             
-            # Create explainer
+            # Create explainer with timeout protection
+            import time
+            start_time = time.time()
             self.explainer = shap.TreeExplainer(model, background_data)
+            logger.info(f"SHAP explainer created in {time.time() - start_time:.2f}s")
             logger.info("SHAP explainer loaded successfully!")
             
         except Exception as e:
-            logger.warning(f"SHAP explainer loading failed: {str(e)}")
+            logger.error(f"SHAP explainer loading failed: {str(e)}")
+            logger.error(f"Full traceback: {traceback.format_exc()}")
             self.explainer = None
     
     def get_explanation(self, smiles: str) -> Dict[str, Any]:
@@ -53,6 +60,7 @@ class ExplainerService:
         Generate SHAP explanation for a SMILES
         """
         if self.explainer is None:
+            logger.warning(f"SHAP explainer not available for {smiles}")
             return {"error": "SHAP explainer not available"}
         
         try:
@@ -61,7 +69,7 @@ class ExplainerService:
             if mol is None:
                 raise ValueError(f"Invalid SMILES: {smiles}")
             
-            # Calculate 8 descriptors (matching training)
+            # Calculate descriptors
             selected_descriptors = [
                 'MolWt', 'NumHDonors', 'NumHAcceptors', 
                 'TPSA', 'NumRotatableBonds',
@@ -91,14 +99,13 @@ class ExplainerService:
                     'shap_value': float(shap_values[0][i])
                 })
             
-            # Sort by absolute SHAP value (most important first)
             feature_importance.sort(key=lambda x: abs(x['shap_value']), reverse=True)
             
             return {
                 'smiles': smiles,
                 'base_value': float(self.explainer.expected_value),
                 'prediction': float(np.sum(shap_values) + self.explainer.expected_value),
-                'feature_importance': feature_importance[:5]  # Top 5 features
+                'feature_importance': feature_importance[:5]
             }
             
         except Exception as e:
