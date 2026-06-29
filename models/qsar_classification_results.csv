@@ -1,0 +1,4 @@
+Model,Accuracy,Precision,Recall,F1-Score,AUC
+Random Forest,0.7156,0.6121,0.2572,0.3622,0.7568
+XGBoost,0.7577,0.678,0.4348,0.5298,0.7713
+LightGBM,0.7463,0.6514,0.413,0.5055,0.7568
