@@ -18,20 +18,20 @@ venv.bak/
 
 # Notebooks
 .ipynb_checkpoints/
-*.ipynb
+# *.ipynb
 
 # Models
-*.pkl
-*.joblib
+# *.pkl
+# *.joblib
 *.h5
 *.pt
 *.onnx
 
 # Data
-*.csv
+# *.csv
 *.npy
-*.json
-!config/*.json
+# *.json
+# !config/*.json
 
 # Logs
 *.log

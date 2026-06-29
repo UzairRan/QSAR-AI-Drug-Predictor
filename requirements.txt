@@ -1,6 +1,6 @@
 # Core
-numpy 
-numpy>=1.24.0 
+# numpy 
+numpy==1.26.4 
 pandas
 python-dotenv
 pyyaml
