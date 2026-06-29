@@ -7,12 +7,14 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
+# Install numpy first (RDKit dependency) 
+RUN pip install numpy==1.26.4
+
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Render sets PORT env variable
 ENV PORT=10000
 EXPOSE $PORT
 

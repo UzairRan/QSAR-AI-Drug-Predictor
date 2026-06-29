@@ -1,33 +1,18 @@
-# Core
-# numpy 
-numpy==1.26.4 
+numpy==1.26.4
 pandas
 python-dotenv
 pyyaml
-
-# RDKit
-# rdkit-pypi
-rdkit-pypi==2023.9.3 
-
-# Machine Learning
+rdkit-pypi==2022.9.5
 scikit-learn
 xgboost
 lightgbm
-
-# Explainability
 shap
-
-# API
 fastapi
 uvicorn
 pydantic
-
-# Frontend
 streamlit
 plotly
-
-# Utilities
 joblib
 matplotlib
 seaborn
-requests   
+requests  
