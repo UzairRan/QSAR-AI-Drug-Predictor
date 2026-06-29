@@ -2,6 +2,5 @@ streamlit
 requests
 pandas
 plotly
-rdkit-pypi
+rdkit-pypi==2023.9.3   
 numpy==1.26.4 
-rdkit-pypi==2023.9.3  
