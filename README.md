@@ -68,7 +68,7 @@ Each molecule contains:
 - In this project, QSAR models are used to predict how strongly a molecule binds to the COX-2 enzyme, which is a target for anti-inflammatory drugs.
 
 
-# Project Architecture
+# Machine Learning Workflow
 
 ```mermaid
 flowchart TD
@@ -173,5 +173,133 @@ The model was trained on these 8 molecular descriptors:
 |------|------------|------------|-------|
 | **Regression** | XGBoost Regressor | R² | **0.298** |
 | **Classification** | XGBoost Classifier | AUC | **0.771** |
+
+
+
+
+--------------------------------------------------------------------------
+
+--------------------------------------------------------------------------
+
+
+# Tech Stack
+
+## 🛠️ Tech Stack
+
+### Backend
+
+| Technology | Purpose |
+|------------|---------|
+| **FastAPI** | REST API framework |
+| **RDKit** | Molecular descriptor calculation |
+| **XGBoost** | Regression & Classification models |
+| **scikit-learn** | Data preprocessing & scaling |
+| **SHAP** | Model explainability |
+| **Uvicorn** | ASGI server |
+
+### Frontend
+
+| Technology | Purpose |
+|------------|---------|
+| **Streamlit** | Web application framework |
+| **Plotly** | Interactive charts |
+| **Requests** | API communication |
+
+### Infrastructure
+
+| Technology | Purpose |
+|------------|---------|
+| **Docker** | Containerization |
+| **Render** | Backend deployment |
+| **Streamlit Cloud** | Frontend deployment |
+| **Git** | Version control |  
+
+--------------------------------------------------------------------------
+
+--------------------------------------------------------------------------
+
+## Tech Stack
+
+## Backend
+
+| Technology | Purpose |
+|------------|---------|
+| FastAPI | REST API framework |
+| RDKit | Molecular descriptor generation |
+| XGBoost | Regression & Classification models |
+| Scikit-learn | Data preprocessing & feature scaling |
+| SHAP | Explainable AI (Model Interpretability) |
+| Uvicorn | ASGI server |
+
+---
+
+## Frontend
+
+| Technology | Purpose |
+|------------|---------|
+| Streamlit | Interactive web application |
+| Plotly | Interactive visualizations |
+| Requests | Backend API communication |
+
+---
+
+## Data Science & Machine Learning
+
+| Technology | Purpose |
+|------------|---------|
+| Python | Programming language |
+| Jupyter Notebook | Model development & experimentation |
+| NumPy | Numerical computing |
+| Pandas | Data manipulation & analysis |
+| Random Forest | Model benchmarking |
+| XGBoost | Final selected ML model |
+| LightGBM | Model benchmarking |
+
+---
+
+## Infrastructure & Deployment
+
+| Technology | Purpose |
+|------------|---------|
+| Docker | Application containerization |
+| Render | Backend deployment |
+| Streamlit Community Cloud | Frontend deployment |
+| Git | Version control |
+| GitHub | Source code hosting & collaboration |
+
+
+--------------------------------------------------------------------------
+
+--------------------------------------------------------------------------
+
+
+# Project Structure
+
+qsar_prediction_system/
+│
+├── backend/                 # FastAPI backend
+│   ├── api/
+│   ├── services/
+│   └── main.py
+│
+├── frontend/                # Streamlit frontend
+│   ├── pages/
+│   ├── components/
+│   └── app.py
+│
+├── models/                  # Trained ML models & artifacts
+├── notebooks/               # Jupyter notebooks
+├── config/                  # Configuration files
+├── deployment/              # Docker & deployment configs
+├── scripts/                 # Utility scripts
+├── tests/                   # Unit tests
+│
+├── Dockerfile
+├── render.yaml
+├── requirements.txt
+├── README.md
+└── .gitignore
+
+
 
   
