@@ -21,8 +21,82 @@ Predict molecular bioactivity from chemical structures using Machine Learning an
 
 --------------------------------------------------------------------------
 
---------------------------------------------------------------------------
+## Project Architecture
 
+```mermaid
+flowchart LR
+
+    %% =========================
+    %% User Layer
+    %% =========================
+    subgraph UI["User Interface"]
+        A[Streamlit Frontend]
+    end
+
+    %% =========================
+    %% Backend Layer
+    %% =========================
+    subgraph Backend["FastAPI Backend"]
+        B[REST API]
+        C[Prediction Service]
+        D[SHAP Explanation Service]
+    end
+
+    %% =========================
+    %% Feature Engineering
+    %% =========================
+    subgraph Features["Feature Engineering"]
+        E[SMILES Input]
+        F[RDKit Descriptor Generator]
+    end
+
+    %% =========================
+    %% Model Layer
+    %% =========================
+    subgraph Models["Machine Learning Models"]
+        G[XGBoost Regressor<br/>Predict pIC50]
+        H[XGBoost Classifier<br/>Predict Activity]
+        I[Standard Scaler]
+    end
+
+    %% =========================
+    %% Flow
+    %% =========================
+    A -->|Prediction Request| B
+
+    B --> C
+    B --> D
+
+    E --> F
+    F --> I
+    I --> C
+
+    C --> G
+    C --> H
+
+    G -->|Regression Output| A
+    H -->|Classification Output| A
+
+    D -->|Feature Importance| A
+
+    %% =========================
+    %% Styling
+    %% =========================
+    style A fill:#2563eb,color:#ffffff,stroke:#1e3a8a,stroke-width:2px
+    style B fill:#16a34a,color:#ffffff,stroke:#166534,stroke-width:2px
+    style C fill:#16a34a,color:#ffffff,stroke:#166534,stroke-width:2px
+    style D fill:#7c3aed,color:#ffffff,stroke:#5b21b6,stroke-width:2px
+
+    style E fill:#f97316,color:#ffffff,stroke:#c2410c,stroke-width:2px
+    style F fill:#f97316,color:#ffffff,stroke:#c2410c,stroke-width:2px
+
+    style G fill:#facc15,color:#000000,stroke:#ca8a04,stroke-width:2px
+    style H fill:#facc15,color:#000000,stroke:#ca8a04,stroke-width:2px
+    style I fill:#06b6d4,color:#ffffff,stroke:#0e7490,stroke-width:2px
+```
+
+
+-------------------------------------------------------------------------- 
 
 # Project Overview
 
@@ -59,7 +133,6 @@ Each molecule contains:
 
 --------------------------------------------------------------------------
 
---------------------------------------------------------------------------
 
 # What is QSAR?
 
@@ -68,46 +141,80 @@ Each molecule contains:
 - In this project, QSAR models are used to predict how strongly a molecule binds to the COX-2 enzyme, which is a target for anti-inflammatory drugs.
 
 
-# Machine Learning Workflow
+## Machine Learning Workflow
+
 
 ```mermaid
 flowchart TD
-    A["**Data Collection**"] --> B["**Data Preprocessing**"]
-    B --> C["**Feature Engineering (RDKit)**"]
-    C --> D["**Train/Test Split**"]
-    D --> E["**Feature Scaling**"]
-    E --> F["**Model Training**"]
-    F --> G["**Model Evaluation**"]
-    G --> H["**Best Model Selection**"]
-    H --> I["**Model Serialization**"]
-    I --> J["**FastAPI Backend**"]
-    J --> K["**REST API Development**"]
-    K --> L["**Streamlit Frontend**"]
-    L --> M["**SHAP Explainability**"]
-    M --> N["**Docker Containerization**"]
-    N --> O["**Deployment**"]
 
-    style A fill:#1a73e8,color:#fff,stroke:#0d47a1,stroke-width:2px
-    style B fill:#1a73e8,color:#fff,stroke:#0d47a1,stroke-width:2px
-    style C fill:#1a73e8,color:#fff,stroke:#0d47a1,stroke-width:2px
-    style D fill:#1a73e8,color:#fff,stroke:#0d47a1,stroke-width:2px
-    style E fill:#1a73e8,color:#fff,stroke:#0d47a1,stroke-width:2px
-    style F fill:#fbbc04,color:#000,stroke:#f9ab00,stroke-width:2px
-    style G fill:#fbbc04,color:#000,stroke:#f9ab00,stroke-width:2px
-    style H fill:#fbbc04,color:#000,stroke:#f9ab00,stroke-width:2px
-    style I fill:#fbbc04,color:#000,stroke:#f9ab00,stroke-width:2px
-    style J fill:#34a853,color:#fff,stroke:#1e8e3e,stroke-width:2px
-    style K fill:#34a853,color:#fff,stroke:#1e8e3e,stroke-width:2px
-    style L fill:#ea4335,color:#fff,stroke:#c5221f,stroke-width:2px
-    style M fill:#ea4335,color:#fff,stroke:#c5221f,stroke-width:2px
-    style N fill:#8A2BE2,color:#fff,stroke:#6a1b9a,stroke-width:2px
-    style O fill:#8A2BE2,color:#fff,stroke:#6a1b9a,stroke-width:2px
+subgraph Phase1["Data Preparation"]
+A[Data Collection]
+B[Data Preprocessing]
+C[Feature Engineering<br/>RDKit Descriptors]
+D[Train / Test Split]
+E[Feature Scaling]
+end
+
+subgraph Phase2["Model Development"]
+F[Model Training]
+G[Model Evaluation]
+H[Best Model Selection]
+I[Model Serialization]
+end
+
+subgraph Phase3["Application Development"]
+J[FastAPI Backend]
+K[REST API]
+L[Streamlit Frontend]
+M[SHAP Explainability]
+end
+
+subgraph Phase4["Deployment"]
+N[Docker]
+O[Render Deployment]
+end
+
+A --> B
+B --> C
+C --> D
+D --> E
+E --> F
+F --> G
+G --> H
+H --> I
+I --> J
+J --> K
+K --> L
+L --> M
+M --> N
+N --> O
+
+%% Data Preparation
+style A fill:#D6EAF8,stroke:#2874A6,stroke-width:2px
+style B fill:#D6EAF8,stroke:#2874A6,stroke-width:2px
+style C fill:#D6EAF8,stroke:#2874A6,stroke-width:2px
+style D fill:#D6EAF8,stroke:#2874A6,stroke-width:2px
+style E fill:#D6EAF8,stroke:#2874A6,stroke-width:2px
+
+%% Model Development
+style F fill:#FCF3CF,stroke:#B7950B,stroke-width:2px
+style G fill:#FCF3CF,stroke:#B7950B,stroke-width:2px
+style H fill:#FCF3CF,stroke:#B7950B,stroke-width:2px
+style I fill:#FCF3CF,stroke:#B7950B,stroke-width:2px
+
+%% Application Development
+style J fill:#D5F5E3,stroke:#239B56,stroke-width:2px
+style K fill:#D5F5E3,stroke:#239B56,stroke-width:2px
+style L fill:#FADBD8,stroke:#CB4335,stroke-width:2px
+style M fill:#FADBD8,stroke:#CB4335,stroke-width:2px
+
+%% Deployment
+style N fill:#E8DAEF,stroke:#7D3C98,stroke-width:2px
+style O fill:#E8DAEF,stroke:#7D3C98,stroke-width:2px
 ```
 
-
 --------------------------------------------------------------------------
 
---------------------------------------------------------------------------
 
 ## 📊 Model Performance
 
@@ -179,44 +286,46 @@ The model was trained on these 8 molecular descriptors:
 
 --------------------------------------------------------------------------
 
+
+# Project Structure
+
+```text
+qsar_prediction_system/
+│
+├── backend/                      # FastAPI backend
+│   ├── api/                      # API routes & schemas
+│   ├── services/                 # Prediction & SHAP services
+│   └── main.py                   # FastAPI entry point
+│
+├── frontend/                     # Streamlit frontend
+│   ├── pages/                    # Application pages
+│   ├── components/               # Reusable UI components
+│   └── app.py                    # Streamlit entry point
+│
+├── models/                       # Trained models & artifacts
+│   ├── qsar_best_regressor.pkl
+│   ├── qsar_best_classifier.pkl
+│   ├── scaler_qsar.joblib
+│   ├── qsar_feature_names.txt
+│   └── shap_background.npy
+│
+├── notebooks/                    # Jupyter notebooks
+├── config/                       # Configuration files
+├── deployment/                   # Docker & deployment configs
+├── scripts/                      # Utility scripts
+├── tests/                        # Unit tests
+│
+├── Dockerfile
+├── render.yaml
+├── requirements.txt
+├── README.md
+└── .gitignore
+```
+
+
 --------------------------------------------------------------------------
 
 
-# Tech Stack
-
-## 🛠️ Tech Stack
-
-### Backend
-
-| Technology | Purpose |
-|------------|---------|
-| **FastAPI** | REST API framework |
-| **RDKit** | Molecular descriptor calculation |
-| **XGBoost** | Regression & Classification models |
-| **scikit-learn** | Data preprocessing & scaling |
-| **SHAP** | Model explainability |
-| **Uvicorn** | ASGI server |
-
-### Frontend
-
-| Technology | Purpose |
-|------------|---------|
-| **Streamlit** | Web application framework |
-| **Plotly** | Interactive charts |
-| **Requests** | API communication |
-
-### Infrastructure
-
-| Technology | Purpose |
-|------------|---------|
-| **Docker** | Containerization |
-| **Render** | Backend deployment |
-| **Streamlit Cloud** | Frontend deployment |
-| **Git** | Version control |  
-
---------------------------------------------------------------------------
-
---------------------------------------------------------------------------
 
 ## Tech Stack
 
@@ -272,41 +381,6 @@ The model was trained on these 8 molecular descriptors:
 
 --------------------------------------------------------------------------
 
-
-# Project Structure
-
-```text
-qsar_prediction_system/
-│
-├── backend/                      # FastAPI backend
-│   ├── api/                      # API routes & schemas
-│   ├── services/                 # Prediction & SHAP services
-│   └── main.py                   # FastAPI entry point
-│
-├── frontend/                     # Streamlit frontend
-│   ├── pages/                    # Application pages
-│   ├── components/               # Reusable UI components
-│   └── app.py                    # Streamlit entry point
-│
-├── models/                       # Trained models & artifacts
-│   ├── qsar_best_regressor.pkl
-│   ├── qsar_best_classifier.pkl
-│   ├── scaler_qsar.joblib
-│   ├── qsar_feature_names.txt
-│   └── shap_background.npy
-│
-├── notebooks/                    # Jupyter notebooks
-├── config/                       # Configuration files
-├── deployment/                   # Docker & deployment configs
-├── scripts/                      # Utility scripts
-├── tests/                        # Unit tests
-│
-├── Dockerfile
-├── render.yaml
-├── requirements.txt
-├── README.md
-└── .gitignore
-```
 
 
 --------------------------------------------------------------------------
@@ -499,5 +573,5 @@ curl -X POST http://localhost:8000/api/v1/predict \
 
 - **LinkedIn:**  https://www.linkedin.com/in/uzair-shafiq/ 
 
-Built with ❤️ for the drug discovery community  
+Built with ❤️ for the drug discovery Community and the use of AI and ML in Computational Chemistry.
   
