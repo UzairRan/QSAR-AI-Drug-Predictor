@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install numpy first (RDKit dependency) 
-RUN pip install numpy==1.26.4
+# RUN pip install numpy==1.26.4
+RUN pip install numpy==2.0.2 
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
