@@ -2,7 +2,7 @@ numpy==2.0.2
 scikit-learn==1.6.1
 xgboost==3.2.0
 shap==0.52.0
-rdkit-pypi==2022.9.5
+rdkit==2025.3.5 
 
 pandas
 python-dotenv
@@ -11,7 +11,7 @@ lightgbm
 
 fastapi
 uvicorn
-pydantic
+pydantic 
 
 streamlit
 plotly
