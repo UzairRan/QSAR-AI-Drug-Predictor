@@ -275,31 +275,229 @@ The model was trained on these 8 molecular descriptors:
 
 # Project Structure
 
+```text
 qsar_prediction_system/
 │
-├── backend/                 # FastAPI backend
-│   ├── api/
-│   ├── services/
-│   └── main.py
+├── backend/                      # FastAPI backend
+│   ├── api/                      # API routes & schemas
+│   ├── services/                 # Prediction & SHAP services
+│   └── main.py                   # FastAPI entry point
 │
-├── frontend/                # Streamlit frontend
-│   ├── pages/
-│   ├── components/
-│   └── app.py
+├── frontend/                     # Streamlit frontend
+│   ├── pages/                    # Application pages
+│   ├── components/               # Reusable UI components
+│   └── app.py                    # Streamlit entry point
 │
-├── models/                  # Trained ML models & artifacts
-├── notebooks/               # Jupyter notebooks
-├── config/                  # Configuration files
-├── deployment/              # Docker & deployment configs
-├── scripts/                 # Utility scripts
-├── tests/                   # Unit tests
+├── models/                       # Trained models & artifacts
+│   ├── qsar_best_regressor.pkl
+│   ├── qsar_best_classifier.pkl
+│   ├── scaler_qsar.joblib
+│   ├── qsar_feature_names.txt
+│   └── shap_background.npy
+│
+├── notebooks/                    # Jupyter notebooks
+├── config/                       # Configuration files
+├── deployment/                   # Docker & deployment configs
+├── scripts/                      # Utility scripts
+├── tests/                        # Unit tests
 │
 ├── Dockerfile
 ├── render.yaml
 ├── requirements.txt
 ├── README.md
 └── .gitignore
+```
+
+
+--------------------------------------------------------------------------
+
+--------------------------------------------------------------------------
+
+#  Live Demo
+
+###  Frontend (Streamlit)
+
+- **Streamlit App:**   https://qsar-ai-drug-predictor.streamlit.app/
 
 
 
+###  Backend API (Render)
+
+-  **Render Backend:**   https://qsar-ai-drug-predictor.onrender.com/
+
+-  https://qsar-ai-drug-predictor.onrender.com/docs
+
+ 
+#  Important Note
+
+This application is deployed using **free cloud services**.
+
+After a period of inactivity, the backend may automatically go to sleep.
+
+Before using the Streamlit application:
+
+1. Open the **Backend API (Render)** link.
+2. Wait **30–60 seconds** for the backend to wake up.
+3. Refresh or open the **Streamlit application**.
+4. Predictions and SHAP explanations should now work normally.
+
+---
+
+# 💻 Installation
+
+## Prerequisites
+
+Make sure you have the following installed:
+
+- Python **3.12+**
+- pip (Python Package Manager)
+- Git *(optional, for cloning the repository)*
+
+---
+
+## Step 1:  Clone the Repository
+
+```bash
+git clone https://github.com/UzairRan/QSAR-AI-Drug-Predictor.git
+
+cd QSAR-AI-Drug-Predictor
+```
+
+---
+
+## Step 2:  Create a Virtual Environment
+
+### Windows
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+### macOS / Linux
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+---
+
+## Step 3: Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Step 4: Download Model Files
+
+Place the following files inside the **models/** directory.
+
+```
+models/
+├── qsar_best_regressor.pkl
+├── qsar_best_classifier.pkl
+├── scaler_qsar.joblib
+├── qsar_feature_names.txt
+└── shap_background.npy
+```
+
+
+# ▶️ Running the Application
+
+## Step 1  Start the Backend (FastAPI)
+
+```bash
+uvicorn backend.main:app --reload
+```
+
+Backend will be available at:
+
+```
+http://localhost:8000
+```
+
+API Documentation:
+
+```
+http://localhost:8000/docs
+```
+
+---
+
+## Step 2: Start the Frontend (Streamlit)
+
+```bash
+streamlit run frontend/app.py
+```
+
+Frontend will be available at:
+
+```
+http://localhost:8501
+```
+
+---
+
+# 🔬 Making Predictions
+
+## Option 1: Using the REST API
+
+```bash
+curl -X POST http://localhost:8000/api/v1/predict \
+-H "Content-Type: application/json" \
+-d '{"smiles":"Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(N)(=O)=O)cc2)cc1"}'
+```
+
+---
+
+## Option 2: Using the Web Application
+
+1. Open the Streamlit application.
+2. Enter a valid **SMILES** string.
+3. Click **Predict**.
+4. View:
+   - Predicted pIC50 value
+   - Activity Class (Active / Inactive)
+   - Confidence Score
+   - SHAP Feature Explanations
+
+
+--------------------------------------------------------------------------
+
+--------------------------------------------------------------------------
+
+# API Endpoints
+
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/` | API information |
+| `GET` | `/health` | Health check |
+| `POST` | `/api/v1/predict` | Predict a single molecule |
+| `POST` | `/api/v1/predict/batch` | Batch prediction |
+| `POST` | `/api/v1/predict/upload` | Predict from uploaded CSV file |
+| `POST` | `/api/v1/explain` | Generate SHAP explanation |
+| `GET` | `/api/v1/models` | List available trained models |
+
+
+--------------------------------------------------------------------------
+
+--------------------------------------------------------------------------
+
+
+
+##  Author
+
+**Uzair Shafique**
+
+- Pharm.D 
+- Machine Learning 
+- AI in Computational Chemistry
+
+- **LinkedIn:**  https://www.linkedin.com/in/uzair-shafiq/ 
+
+Built with ❤️ for the drug discovery community  
   
